@@ -36,23 +36,27 @@ export const register = async(req, res)=>{
             password: hashedPassword,
         });
 
-        await newUser.save();
 
         const token = jwt.sign(
             { id: newUser._id },
             process.env.JWT_SECRET,
-            { expiresIn: "1d" }
+            { expiresIn: "7d" }
         )
+
+        newUser.token = token;
+        await newUser.save();
+
 
         res.status(201).json({
             message: "Registration successful",
+            token: token,
             user: {
                 _id: newUser._id,
                 name: newUser.name,
                 email: newUser.email,
             }
         });
-        token
+
     } catch(error){
         console.error("something error", error);
         res.status(500).json({error: "Internal server error"})
@@ -69,34 +73,41 @@ export const login = async(req,res)=>{
             return res.status(400).json({error: "Please provide email and password"});
         }
 
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-        if(!isPasswordValid){
-            return res.status(401).json({error: "Invalid password"})
-        }
+
 
         if(!user){
             return res.status(404).json({error: "User not found"})
         }
 
 
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
+            return res.status(401).json({ error: "Invalid password" })
+        }
 
-        await user.save();
+
 
         // Generate JWT token
         const token = jwt.sign(
             { id: user._id },
             process.env.JWT_SECRET,
-            { expiresIn: "1d" }
+            { expiresIn: "7d" }
+
+
+
         );
 
+        user.token = token;
+        await user.save();
         res.status(200).json({
             message: "Login successful",
+            token,
             user: {
                 _id: user._id,
                 name: user.name,
                 email: user.email,
             },
-            token,
+
         });
 
     } catch(error){
