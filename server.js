@@ -1,15 +1,21 @@
 import express from "express"
 import dotenv from "dotenv";
+import cors from "cors"
 import dbConnect from "./database/db.js";
 import userRoute from "./routers/userRoute.js"
 import jobRoute from "./routers/jobRoute.js"
 dotenv.config();
 
 const app = express();
-const PORT = 3000;
+const PORT = 5000;
 
 dbConnect()
 app.use(express.json())
+
+app.use(cors({
+    origin: process.env.VITE_API_URL,
+    credentials: true,
+}))
 
 app.use("/api/auth", userRoute);
 app.use("/api", jobRoute);
