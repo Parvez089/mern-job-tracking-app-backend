@@ -6,8 +6,8 @@ const router = express.Router();
 
 router.post("/jobs", jwtToken, createJob);
 router.get("/jobs", jwtToken, getJobs);
-router.get("/job/:id", jwtToken, getJob);
-router.put("/job/:id", jwtToken, updateJob);
-router.delete("/job/:id", jwtToken, deleteJob);
+router.get("/jobs/:id", jwtToken, getJob);
+router.put("/jobs/:id", jwtToken, updateJob);
+router.delete("/jobs/:id", jwtToken, deleteJob);
 
 export default router;
