@@ -19,15 +19,16 @@ const allowedOrigins = [
 
 app.use(cors({
     origin: function (origin, callback) {
-        if (!origin) return callback(null, true);
+        if (!origin) return callback(null, true);  
         if (allowedOrigins.indexOf(origin) === -1) {
-            const msg = "CORS policy: Access from this origin not allowed";
-            return callback(new Error(msg), false);
+            return callback(new Error("CORS policy: Access from this origin not allowed"), false);
         }
         return callback(null, true);
     },
-    credentials: true
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
 }));
+
 
 app.use("/api/auth", userRoute);
 app.use("/api", jobRoute);
