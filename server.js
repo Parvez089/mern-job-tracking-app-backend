@@ -15,7 +15,7 @@ app.use(express.json());
 
 const allowedOrigins = [
     "http://localhost:5173",
-    "https://mern-job-tracking-app-frontend-xhas",
+    "https://mern-job-tracking-app.vercel.app",
 ];
 
 app.use(
